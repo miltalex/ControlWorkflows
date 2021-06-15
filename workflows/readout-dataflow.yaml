@@ -35,6 +35,7 @@ roles:
       dd_discovery_ib_hostname: "{{ it }}-ib" # MUST be defined for all stfb and stfs
       # dpl_workflow is set to <detector>_dpl_workflow if such an override exists
       dpl_workflow: "{{ PrefixedOverride( 'dpl_workflow', ToLower( DetectorForHost( it ) ) ) }}"
+      detector: "{{DetectorForHost( it )}}"
     constraints:
       - attribute: machine_id
         value: "{{ it }}"
@@ -267,3 +268,20 @@ roles:
           trigger: DESTROY
           timeout: 5s
           critical: false
+  - name: ctp
+    # enabled: "{{odc_enabled == 'true'}}"
+    roles:
+      - name: start
+        call:
+          func: cts.RunStart()
+          trigger: after_START_ACTIVITY
+          # await: after_START_ACTIVITY
+          timeout: 5s
+          critical: true
+      - name: stop
+        call:
+          func: cts.RunStop()
+          trigger: before_STOP_ACTIVITY
+          await: after_STOP_ACTIVITY
+          timeout: 5s
+          critical: true
