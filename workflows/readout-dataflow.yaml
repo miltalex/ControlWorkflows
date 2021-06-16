@@ -215,7 +215,7 @@ roles:
       - name: initialize
         call:
           func: ddsched.PartitionInitialize()
-          trigger: before_CONFIGURE
+          trigger: enter_CONFIGURE
           timeout: 5s
           critical: true
       - name: terminate
@@ -236,7 +236,7 @@ roles:
       - name: configure
         call:
           func: odc.Configure()
-          trigger: before_CONFIGURE
+          trigger: enter_CONFIGURE
           await: after_CONFIGURE
           timeout: 30s
           critical: true
